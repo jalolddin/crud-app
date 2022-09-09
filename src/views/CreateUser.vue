@@ -38,7 +38,7 @@
 <script>
 import axios from "axios";
 export default {
-    props: ['auth'],
+
   data() {
     return {
       name: "",
@@ -85,14 +85,16 @@ export default {
             this.$toast.success(`Данные успешно сохранены`, {
               position: "top-right",
             });
+            localStorage.setItem('value', JSON.stringify(false));
+            localStorage.setItem('user_key', JSON.stringify(response.data.auth_key))
             this.name = "";
             this.email = "";
             this.$router.push("/");
           }
-     this.$store.state.auth = response.data.auth_key
+     this.$store.state.auth = response.data.auth_key    
      this.$store.state.name = response.data.name
-     this.$store.state.email = response.data.email     
-        })
+     this.$store.state.email = response.data.email
+    })
         .catch((error) => {
           this.$toast.error(`Ошибка с данными`, {
             position: "top-right",

@@ -5,7 +5,7 @@
     <!-- Buttons for create user -->
     <div class="home__buttons">
       <!-- CreateUser -->
-      <router-link to="/CreateUser">
+      <router-link v-if="value" to="/CreateUser">
         <button>Создать пользователя</button>
       </router-link>
 
@@ -21,9 +21,10 @@
     <!-- User list -->
     <div v-if="listUsers">
       <div class="home__users">
-        <h2>Пользователь :</h2>
-        <h2>{{ "ФИО: " + listUsers.name }}</h2>
-        <h2>{{ "Email: " + listUsers.email }}</h2>
+ 
+        <h5>{{ "ФИО: " + listUsers.name }}</h5>
+        <h5>{{ "Email: " + listUsers.email }}</h5>
+        <h5>{{ "Authkey: " + listUsers.auth_key }}</h5>
       </div>
     </div>
   </div>
@@ -40,12 +41,20 @@ export default {
       listUsers: null,
     };
   },
+  computed: {
+    auth_key(){
+return JSON.parse(localStorage.getItem('user_key'))
+    },
+value(){
+  return JSON.parse(localStorage.getItem('value')) ?? true 
+}
+  },
   methods: {
     list() {
       axios
         .get("https://api.sitemap-generator.ru/test-api/user", {
           headers: {
-            Authorization: "Bearer " + this.$store.state.auth,
+            Authorization: "Bearer " + this.auth_key,
           },
         })
         .then((response) => (this.listUsers = response.data));
